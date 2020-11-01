@@ -41,7 +41,6 @@
 		getComplementary(clr) { 
 			return [(clr[0] + 180) % 360, clr.slice(1)].flat(); 
 		}
-
 	}
 
 	class CustomColor extends Color { //~
@@ -65,8 +64,8 @@
 		}
 
 		getAnalogous() {
-			return [this.toHex(color([(this.clrHSL_[0] + 40) % 360, this.clrHSL_.slice(1)].flat())),
-				 this.toHex(color([(this.clrHSL_[0] - 40) % 360, this.clrHSL_.slice(1)].flat()))]; 
+			return [this.toHex(color([(this.clrHSL_[0] + 60) % 360, this.clrHSL_.slice(1)].flat())),
+				 this.toHex(color([(this.clrHSL_[0] + 120) % 360, this.clrHSL_.slice(1)].flat()))]; 
 		}
 		
 		// getComplementary() {
@@ -95,6 +94,11 @@
 
 	// update text vals + colors
 	renderColorVals = _ => {
+		// update picker swatch
+		colorSwatch.style.backgroundColor = customClr.clrHex;
+		colorSwatch.value = customClr.clrHex;
+
+		// update picker vals
 		rgbVal.innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
 		hexVal.innerHTML = colorSwatch.value;
 		hslVal.innerHTML = `hsl(${ customClr.clrHSL })`; //~
@@ -124,4 +128,14 @@
 
 		renderColorVals();
 	});
+
+	// ~random color generation on 'r' keypress
+	// rand hex from https://css-tricks.com/snippets/javascript/random-hex-color/
+	document.onkeydown = function(e) {
+		if (e.key == 'r' || e.key == 'R') {
+			customClr = new CustomColor(color('#' + Math.floor(Math.random()*16777215).toString(16)));
+			renderColorVals();
+		}
+	}
+	
 })();
