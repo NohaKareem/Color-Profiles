@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Color Profiles</title>
+        <script src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+        <link href="css/reset.css" rel="stylesheet" type="text/css">
+        <link href="css/main.css" rel="stylesheet" type="text/css">
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Color Profiles</h1>
+            <div class="inputCon">
+                <div class="colorText">
+                    <h3>Pick a color</h3>
+                    <div class="colors">
+                        <p class="hexVal"></p>
+                        <p class="rgbVal"></p>
+                        <p class="hslVal"></p>
+                    </div>
+                </div>
+                <input type="color" class="colorSwatch" id="colorSwatch" name="colorSwatch" value="#719bf9"> 
+                <label for="colorSwatch" class="hidden">Color Picker</label>
+            </div>
+            <div class="palette">
+                <div class="comCon">
+                    <div class="addSwatch complementary"></div>
+                </div>
+                <div class="anCon">
+                    <div class="addSwatch analogous1"></div>
+                    <div class="addSwatch analogous2"></div>
+                </div>
+            </div>
+        </div>
+        <script src="js/main.js"></script>
+    </body>
+</html>

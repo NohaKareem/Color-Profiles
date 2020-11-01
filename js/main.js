@@ -1,0 +1,127 @@
+(_ => {
+	let customClr, colorSwatch = document.querySelector('.colorSwatch');
+	let complementary = document.querySelector('.complementary');
+	let analogous1 = document.querySelector('.analogous1');
+	let analogous2 = document.querySelector('.analogous2'); //~
+	let rgbVal = document.querySelector('.rgbVal');
+	let hexVal = document.querySelector('.hexVal');
+	let hslVal = document.querySelector('.hslVal');
+
+	setup = _ => {
+		createCanvas(windowWidth, windowHeight);
+		customClr = new CustomColor(color(colorSwatch.value)); //~setcolor
+		renderColorVals();
+		noLoop();
+	}
+	  
+	// draw = _ => {
+	// 	noLoop();
+			
+	// 	let x = new CustomColor(color('#ff0000'))
+	// 	console.log(x.clrHex)
+	// 	console.log(x.clrHSL)
+	// 	console.log(x.clrRGB)
+	// }
+
+	// generic colorr class, to conver color values given string/numeric input
+	class Color {
+		// constructor() {}
+		toRGB(clr) { return this.strToArr(clr.toString('rgb')); }
+		toHex(clr) { return clr.toString('#rrggbb'); }
+		toHSL(clr) { return this.strToArr(clr.toString('hsl')); }
+
+		// helper method to clean color text and parse as array of integers
+		strToArr(clrStr) {
+			return clrStr.replace(')','').replace('rgb(','').replace('hsl(', '')
+				.split(',')
+				.map(ch => { return parseInt(ch) })
+		}
+
+		// compute complementary/analogous colors
+		getComplementary(clr) { 
+			return [(clr[0] + 180) % 360, clr.slice(1)].flat(); 
+		}
+
+	}
+
+	class CustomColor extends Color { //~
+		constructor(clr) {
+			super(); // ~all methods by Color parent class
+			this.clr = clr;
+			this.clrRGB_ = this.toRGB(clr);//this.strToArr(clr.toString('rgb'));
+			this.clrHex_ = this.toHex(clr);//clr.toString('#rrggbb');	
+			this.clrHSL_ = this.toHSL(clr);//this.strToArr(clr.toString('hsl'));	
+		}
+
+		// helper method to clean color text and parse as array of integers
+		// strToArr(clrStr) {
+		// 	return clrStr.replace(')','').replace('rgb(','').replace('hsl(', '')
+		// 		.split(',')
+		// 		.map(ch => { return parseInt(ch) });
+		// }
+
+		getComplementary() {
+			return this.toHex(color([(this.clrHSL_[0] + 180) % 360, this.clrHSL_.slice(1)].flat())); 
+		}
+
+		getAnalogous() {
+			return [this.toHex(color([(this.clrHSL_[0] + 40) % 360, this.clrHSL_.slice(1)].flat())),
+				 this.toHex(color([(this.clrHSL_[0] - 40) % 360, this.clrHSL_.slice(1)].flat()))]; 
+		}
+		
+		// getComplementary() {
+		// 	return [(this.clrHSL_[0] + 180) % 360, this.clrHSL_.slice(1)].flat(); 
+		// }
+
+		// compute complementary/analogous colors
+		getComplementaryToHex() { 
+			let compl = this.getComplementary(this.clrHSL_);
+			return this.toHex(color('hsb(' + compl[0] + ',' + compl[1] + '%,' + compl[2] + '%'));
+			// return compl;// [(this.clrHSL_[0] + 180) % 360, this.clrHSL_.slice(1)].flat(); 
+		}
+
+		// toRGB(clr) { return this.strToArr(clr.toString('rgb')); }
+		// toHex(clr) { return clr.toString('#rrggbb'); }
+
+		// getter and setters
+		get clrRGB() { return this.clrRGB_; }
+		get clrHex() { return this.clrHex_; }
+		get clrHSL() { return this.clrHSL_; }
+
+		set clrRGB(rgb) { this.clrRGB_ = rgb; }
+		set clrHex(hex) { this.clrHex_ = hex; }
+		set clrHSL(hsl) { this.clrHSL_ = hsl; }
+	}
+
+	// update text vals + colors
+	renderColorVals = _ => {
+		rgbVal.innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
+		hexVal.innerHTML = colorSwatch.value;
+		hslVal.innerHTML = `hsl(${ customClr.clrHSL })`; //~
+
+		rgbVal.style.color = colorSwatch.value;
+		hexVal.style.color = colorSwatch.value;
+		hslVal.style.color = colorSwatch.value;
+
+		// complementary + analogous
+		complementary.style.backgroundColor = customClr.getComplementary();
+		analogous1.style.backgroundColor = customClr.getAnalogous()[0];
+		analogous2.style.backgroundColor = customClr.getAnalogous()[1];
+	}
+	
+	// update P5.js color object + ~swatches' background colors on change
+	colorSwatch.addEventListener('change', _ => {
+		colorSwatch.style.backgroundColor = colorSwatch.value;
+		customClr = new CustomColor(color(colorSwatch.value));
+		// console.log(colorSwatch.value)
+		// console.log(customClr.toHex(color(349, 45, 45)))
+		// console.log('new ' + customClr.getComplementaryToHex())
+		// console.log('hsl', (color('hsl(' + customClr.getComplementary().toString() + ')')))//customClr.toRGB
+		// console.log('rgb', customClr.toRGB(color(customClr.getComplementary())))//customClr.toRGB
+
+		// complementary.style.backgroundColor = customClr.toHex(color(customClr.getComplementary()));// customClr.toRGB(customClr.getComplementary());
+		// console.log('after', complementary.style.backgroundColor)
+
+		renderColorVals();
+	});
+})();

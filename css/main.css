@@ -1,0 +1,70 @@
+.hidden {
+  display: none;
+}
+
+body {
+  font-size: 1.3rem;
+  font-family: "Poppins", sans-serif;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+.circleStyles, .addSwatch, .inputCon input[type=color] {
+  width: 100px;
+  height: 100px;
+  padding: 50px;
+  border-radius: 50%;
+  border: none;
+}
+
+.centerAlign, .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  flex-direction: column;
+  margin: 3.3333333333%;
+}
+
+.inputCon {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 5%;
+  align-items: center;
+}
+.inputCon .colorText {
+  display: grid;
+  grid-template-rows: 1fr 3fr;
+}
+.inputCon .colorText p {
+  color: red;
+  line-height: 2.3rem;
+}
+.inputCon input[type=color] {
+  background-color: #719bf9;
+}
+.inputCon input::-webkit-color-swatch {
+  border: none;
+}
+
+.addSwatch {
+  background-color: #eaeaea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+  color: #ada8a8;
+}
+
+.palette {
+  display: flex;
+}
+.palette div {
+  margin: 5px;
+}
+
+/*# sourceMappingURL=main.css.map */
