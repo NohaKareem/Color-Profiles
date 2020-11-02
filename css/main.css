@@ -25,6 +25,10 @@ h3 {
   margin-bottom: 2.5%;
 }
 
+.shortcut {
+  font-weight: bold;
+}
+
 .circleStyles, .addSwatch, .inputCon input[type=color] {
   width: 100px;
   height: 100px;

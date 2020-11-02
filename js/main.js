@@ -79,7 +79,7 @@
 		// compute complementary/analogous colors
 		getComplementaryToHex() { 
 			let compl = this.getComplementary(this.clrHSL_);
-			return this.toHex(color('hsb(' + compl[0] + ',' + compl[1] + '%,' + compl[2] + '%'));
+			return this.toHex(color('hsl(' + compl[0] + ',' + compl[1] + '%,' + compl[2] + '%'));
 			// return compl;// [(this.clrHSL_[0] + 180) % 360, this.clrHSL_.slice(1)].flat(); 
 		}
 
@@ -96,10 +96,10 @@
 		set clrHSL(hsl) { this.clrHSL_ = hsl; }
 	}
 
-	updateSwatchColors = _ => {
-		pickerSwatchVals[0].innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
-		pickerSwatchVals[1].innerHTML = colorSwatch.value;
-		pickerSwatchVals[2].innerHTML = `hsl(${ customClr.clrHSL })`; //~
+	updateSwatchColors = (swatchVals, clr) => {
+		swatchVals[0].innerHTML = `rgb(${ clr.clrRGB.toString() })`;
+		swatchVals[1].innerHTML = clr.clrHex_;//colorSwatch.value;
+		swatchVals[2].innerHTML = `hsl(${ clr.clrHSL })`; //~
 	}
 
 	// update text vals + colors
@@ -109,7 +109,7 @@
 		colorSwatch.value = customClr.clrHex;
 
 		// update picker vals
-		updateSwatchColors(pickerSwatchVals);
+		updateSwatchColors(pickerSwatchVals, customClr);
 
 		pickerSwatchVals[0].style.color = colorSwatch.value;
 		pickerSwatchVals[1].style.color = colorSwatch.value;
@@ -117,21 +117,14 @@
 
 		// complementary + analogous
 		complementary.style.backgroundColor = customClr.getComplementary();
+		console.log(color(customClr.getAnalogous()[0]))
 		analogous1.style.backgroundColor = customClr.getAnalogous()[0]; //~
 		analogous2.style.backgroundColor = customClr.getAnalogous()[1];
 		
 		// ~update complementary swatch colors ~~update vals
-		comSwatchVals[0].innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
-		comSwatchVals[1].innerHTML = colorSwatch.value;
-		comSwatchVals[2].innerHTML = `hsl(${ customClr.clrHSL })`; //~ 
-
-		an1SwatchVals[0].innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
-		an1SwatchVals[1].innerHTML = colorSwatch.value;
-		an1SwatchVals[2].innerHTML = `hsl(${ customClr.clrHSL })`; //~ 
-
-		an2SwatchVals[0].innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
-		an2SwatchVals[1].innerHTML = colorSwatch.value;
-		an2SwatchVals[2].innerHTML = `hsl(${ customClr.clrHSL })`; //~ 
+		updateSwatchColors(comSwatchVals, customClr);
+		updateSwatchColors(an1SwatchVals, new CustomColor(color(customClr.getAnalogous()[0])));
+		updateSwatchColors(an2SwatchVals, new CustomColor(color(customClr.getAnalogous()[1])));
 
 		// comSwatchVals[0].innerHTML = `rgb(${ customClr.getComplentary().clrRGB.toString() })`;
 		// comSwatchVals[1].innerHTML = customClr.getComplentary();
