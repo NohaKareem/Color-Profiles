@@ -3,6 +3,10 @@
 	let complementary = document.querySelector('.complementary');
 	let analogous1 = document.querySelector('.analogous1');
 	let analogous2 = document.querySelector('.analogous2'); //~
+	let pickerSwatchVals = [document.querySelector('.rgbVal'), document.querySelector('.hexVal'), document.querySelector('.hslVal')]; 
+	let comSwatchVals = [document.querySelector('.comRgbVal'), document.querySelector('.comHexVal'), document.querySelector('.comHslVal')]; 
+	let an1SwatchVals = [document.querySelector('.an1RgbVal'), document.querySelector('.an1HexVal'), document.querySelector('.an1HslVal')]; 
+	let an2SwatchVals = [document.querySelector('.an2RgbVal'), document.querySelector('.an2HexVal'), document.querySelector('.an2HslVal')]; 
 	let rgbVal = document.querySelector('.rgbVal');
 	let hexVal = document.querySelector('.hexVal');
 	let hslVal = document.querySelector('.hslVal');
@@ -92,6 +96,12 @@
 		set clrHSL(hsl) { this.clrHSL_ = hsl; }
 	}
 
+	updateSwatchColors = _ => {
+		pickerSwatchVals[0].innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
+		pickerSwatchVals[1].innerHTML = colorSwatch.value;
+		pickerSwatchVals[2].innerHTML = `hsl(${ customClr.clrHSL })`; //~
+	}
+
 	// update text vals + colors
 	renderColorVals = _ => {
 		// update picker swatch
@@ -99,18 +109,42 @@
 		colorSwatch.value = customClr.clrHex;
 
 		// update picker vals
-		rgbVal.innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
-		hexVal.innerHTML = colorSwatch.value;
-		hslVal.innerHTML = `hsl(${ customClr.clrHSL })`; //~
+		updateSwatchColors(pickerSwatchVals);
 
-		rgbVal.style.color = colorSwatch.value;
-		hexVal.style.color = colorSwatch.value;
-		hslVal.style.color = colorSwatch.value;
+		pickerSwatchVals[0].style.color = colorSwatch.value;
+		pickerSwatchVals[1].style.color = colorSwatch.value;
+		pickerSwatchVals[2].style.color = colorSwatch.value;
 
 		// complementary + analogous
 		complementary.style.backgroundColor = customClr.getComplementary();
-		analogous1.style.backgroundColor = customClr.getAnalogous()[0];
+		analogous1.style.backgroundColor = customClr.getAnalogous()[0]; //~
 		analogous2.style.backgroundColor = customClr.getAnalogous()[1];
+		
+		// ~update complementary swatch colors ~~update vals
+		comSwatchVals[0].innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
+		comSwatchVals[1].innerHTML = colorSwatch.value;
+		comSwatchVals[2].innerHTML = `hsl(${ customClr.clrHSL })`; //~ 
+
+		an1SwatchVals[0].innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
+		an1SwatchVals[1].innerHTML = colorSwatch.value;
+		an1SwatchVals[2].innerHTML = `hsl(${ customClr.clrHSL })`; //~ 
+
+		an2SwatchVals[0].innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
+		an2SwatchVals[1].innerHTML = colorSwatch.value;
+		an2SwatchVals[2].innerHTML = `hsl(${ customClr.clrHSL })`; //~ 
+
+		// comSwatchVals[0].innerHTML = `rgb(${ customClr.getComplentary().clrRGB.toString() })`;
+		// comSwatchVals[1].innerHTML = customClr.getComplentary();
+		// comSwatchVals[2].innerHTML = `hsl(${ customClr.clrHSL })`; //~
+
+		// ~update complemntary vals
+		// rgbVal.innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
+		// hexVal.innerHTML = colorSwatch.value;
+		// hslVal.innerHTML = `hsl(${ customClr.clrHSL })`; //~
+
+		// rgbVal.style.color = colorSwatch.value;
+		// hexVal.style.color = colorSwatch.value;
+		// hslVal.style.color = colorSwatch.value;
 	}
 	
 	// update P5.js color object + ~swatches' background colors on change
@@ -129,11 +163,11 @@
 		renderColorVals();
 	});
 
-	// ~random color generation on 'r' keypress
+	// random color generation on 'r' keypress
 	// rand hex from https://css-tricks.com/snippets/javascript/random-hex-color/
 	document.onkeydown = function(e) {
 		if (e.key == 'r' || e.key == 'R') {
-			customClr = new CustomColor(color('#' + Math.floor(Math.random()*16777215).toString(16)));
+			customClr = new CustomColor(color('#' + Math.floor(Math.random() * 16777215).toString(16)));
 			renderColorVals();
 		}
 	}

@@ -25,15 +25,43 @@
                 <input type="color" class="colorSwatch" id="colorSwatch" name="colorSwatch" value="#719bf9"> 
                 <label for="colorSwatch" class="hidden">Color Picker</label>
             </div>
-            <div class="palette">
+            <!-- <div class="palette"> -->
                 <div class="comCon">
-                    <div class="addSwatch complementary"></div>
+                    <!-- <div class="fullWid complementary"> -->
+                    <div class="colorText fullWid complementary">
+                        <h3>Complementary Color</h3>
+                        <div class="colors">
+                            <p class="comHexVal"></p>
+                            <p class="comRgbVal"></p>
+                            <p class="comHslVal"></p>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                    <!-- <div class="addSwatch complementary"></div> -->
                 </div>
                 <div class="anCon">
-                    <div class="addSwatch analogous1"></div>
-                    <div class="addSwatch analogous2"></div>
+                    <div class="anGrid">
+                        <div class="halfWid analogous1">
+                            <h3>Analogous Color 1</h3>
+                            <div class="colors">
+                                <p class="an1HexVal"></p>
+                                <p class="an1RgbVal"></p>
+                                <p class="an1HslVal"></p>
+                            </div>
+                            <!-- <div class="addSwatch analogous1"></div> -->
+                        </div>
+                        <div class="halfWid analogous2">
+                            <h3>Analogous Color 2</h3>
+                            <div class="colors">
+                                <p class="an2HexVal"></p>
+                                <p class="an2RgbVal"></p>
+                                <p class="an2HslVal"></p>
+                            </div>
+                            <!-- <div class="addSwatch analogous2"></div> -->
+                        </div>
+                    </div>
                 </div>
-            </div>
+            <!-- </div> -->
         </div>
         <script src="js/main.js"></script>
     </body>
