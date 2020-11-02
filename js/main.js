@@ -2,14 +2,11 @@
 	let customClr, colorSwatch = document.querySelector('.colorSwatch');
 	let complementary = document.querySelector('.complementary');
 	let analogous1 = document.querySelector('.analogous1');
-	let analogous2 = document.querySelector('.analogous2'); //~
+	let analogous2 = document.querySelector('.analogous2'); 
 	let pickerSwatchVals = [document.querySelector('.rgbVal'), document.querySelector('.hexVal'), document.querySelector('.hslVal')]; 
 	let comSwatchVals = [document.querySelector('.comRgbVal'), document.querySelector('.comHexVal'), document.querySelector('.comHslVal')]; 
 	let an1SwatchVals = [document.querySelector('.an1RgbVal'), document.querySelector('.an1HexVal'), document.querySelector('.an1HslVal')]; 
 	let an2SwatchVals = [document.querySelector('.an2RgbVal'), document.querySelector('.an2HexVal'), document.querySelector('.an2HslVal')]; 
-	let rgbVal = document.querySelector('.rgbVal');
-	let hexVal = document.querySelector('.hexVal');
-	let hslVal = document.querySelector('.hslVal');
 
 	setup = _ => {
 		createCanvas(windowWidth, windowHeight);
@@ -17,17 +14,8 @@
 		renderColorVals();
 		noLoop();
 	}
-	  
-	// draw = _ => {
-	// 	noLoop();
-			
-	// 	let x = new CustomColor(color('#ff0000'))
-	// 	console.log(x.clrHex)
-	// 	console.log(x.clrHSL)
-	// 	console.log(x.clrRGB)
-	// }
-
-	// generic colorr class, to conver color values given string/numeric input
+	
+	// generic color class (akin to a static class), to convet color values given string/numeric input
 	class Color {
 		// constructor() {}
 		toRGB(clr) { return this.strToArr(clr.toString('rgb')); }
@@ -47,6 +35,7 @@
 		}
 	}
 
+	// CustomColor class, to instantiate color values 
 	class CustomColor extends Color { //~
 		constructor(clr) {
 			super(); // ~all methods by Color parent class
@@ -56,35 +45,16 @@
 			this.clrHSL_ = this.toHSL(clr);//this.strToArr(clr.toString('hsl'));	
 		}
 
-		// helper method to clean color text and parse as array of integers
-		// strToArr(clrStr) {
-		// 	return clrStr.replace(')','').replace('rgb(','').replace('hsl(', '')
-		// 		.split(',')
-		// 		.map(ch => { return parseInt(ch) });
-		// }
-
-		getComplementary() {
-			return this.toHex(color([(this.clrHSL_[0] + 180) % 360, this.clrHSL_.slice(1)].flat())); 
+		// return complemntary color hex value
+		getComplementaryHex() {
+			return this.toHex(color(this.getComplementary(this.clrHSL_))); 
+			// return this.toHex(color([(this.clrHSL_[0] + 180) % 360, this.clrHSL_.slice(1)].flat())); 
 		}
 
-		getAnalogous() {
+		getAnalogous() { // ~color 
 			return [this.toHex(color([(this.clrHSL_[0] + 60) % 360, this.clrHSL_.slice(1)].flat())),
 				 this.toHex(color([(this.clrHSL_[0] + 120) % 360, this.clrHSL_.slice(1)].flat()))]; 
 		}
-		
-		// getComplementary() {
-		// 	return [(this.clrHSL_[0] + 180) % 360, this.clrHSL_.slice(1)].flat(); 
-		// }
-
-		// compute complementary/analogous colors
-		getComplementaryToHex() { 
-			let compl = this.getComplementary(this.clrHSL_);
-			return this.toHex(color('hsl(' + compl[0] + ',' + compl[1] + '%,' + compl[2] + '%'));
-			// return compl;// [(this.clrHSL_[0] + 180) % 360, this.clrHSL_.slice(1)].flat(); 
-		}
-
-		// toRGB(clr) { return this.strToArr(clr.toString('rgb')); }
-		// toHex(clr) { return clr.toString('#rrggbb'); }
 
 		// getter and setters
 		get clrRGB() { return this.clrRGB_; }
@@ -100,6 +70,9 @@
 		swatchVals[0].innerHTML = `rgb(${ clr.clrRGB.toString() })`;
 		swatchVals[1].innerHTML = clr.clrHex_;//colorSwatch.value;
 		swatchVals[2].innerHTML = `hsl(${ clr.clrHSL })`; //~
+
+		// update color		
+		// swatchVals.forEach(val => { val.style.color = colorSwatch.value; });
 	}
 
 	// update text vals + colors
@@ -111,13 +84,10 @@
 		// update picker vals
 		updateSwatchColors(pickerSwatchVals, customClr);
 
-		pickerSwatchVals[0].style.color = colorSwatch.value;
-		pickerSwatchVals[1].style.color = colorSwatch.value;
-		pickerSwatchVals[2].style.color = colorSwatch.value;
 
 		// complementary + analogous
-		complementary.style.backgroundColor = customClr.getComplementary();
-		console.log(color(customClr.getAnalogous()[0]))
+		complementary.style.backgroundColor = customClr.getComplementaryHex();
+		console.log(customClr.getComplementaryHex())
 		analogous1.style.backgroundColor = customClr.getAnalogous()[0]; //~
 		analogous2.style.backgroundColor = customClr.getAnalogous()[1];
 		
@@ -125,19 +95,6 @@
 		updateSwatchColors(comSwatchVals, customClr);
 		updateSwatchColors(an1SwatchVals, new CustomColor(color(customClr.getAnalogous()[0])));
 		updateSwatchColors(an2SwatchVals, new CustomColor(color(customClr.getAnalogous()[1])));
-
-		// comSwatchVals[0].innerHTML = `rgb(${ customClr.getComplentary().clrRGB.toString() })`;
-		// comSwatchVals[1].innerHTML = customClr.getComplentary();
-		// comSwatchVals[2].innerHTML = `hsl(${ customClr.clrHSL })`; //~
-
-		// ~update complemntary vals
-		// rgbVal.innerHTML = `rgb(${ customClr.clrRGB.toString() })`;
-		// hexVal.innerHTML = colorSwatch.value;
-		// hslVal.innerHTML = `hsl(${ customClr.clrHSL })`; //~
-
-		// rgbVal.style.color = colorSwatch.value;
-		// hexVal.style.color = colorSwatch.value;
-		// hslVal.style.color = colorSwatch.value;
 	}
 	
 	// update P5.js color object + ~swatches' background colors on change
