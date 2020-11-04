@@ -55,8 +55,9 @@
 		}
 
 		getAnalogousHex() { 
-			return [this.toHex(color(this.getAnalogous(this.clrHSL_, 60))),
-				this.toHex(color(this.getAnalogous(this.clrHSL_, 120)))];
+			
+			return [this.toHex(color(this.getAnalogous(this.clrHSL_, -60))),
+				this.toHex(color(this.getAnalogous(this.clrHSL_, -120)))];
 		}
 
 		// getter and setters
