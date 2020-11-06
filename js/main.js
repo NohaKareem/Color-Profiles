@@ -30,25 +30,18 @@
 		}
 
 		// helper method to convert hsl val array to p5.js color string
-		getHSLStr(hslArr) {
-			return `hsl(${ hslArr[0] }, ${ hslArr[1] }%,${ hslArr[2] }%)`;
-		}
+		getHSLStr(hslArr) { return `hsl(${ hslArr[0] }, ${ hslArr[1] }%,${ hslArr[2] }%)`; }
 
 		// compute complementary/analogous colors
-		getComplementary(clr) { 
-			return this.getHSLStr([(clr[0] + 180) % 360, clr.slice(1)].flat()); 
-		}
+		getComplementary(clr) { return this.getHSLStr([(clr[0] + 180) % 360, clr.slice(1)].flat()); }
 
-		getAnalogous(clr, angle) {
-			return this.getHSLStr([(clr[0] + angle) % 360, clr.slice(1)].flat());
-		}
+		getAnalogous(clr, angle) { return this.getHSLStr([(clr[0] + angle) % 360, clr.slice(1)].flat()); }
 	}
 
 	// CustomColor class, to instantiate color values 
 	class CustomColor extends Color { 
 		constructor(clr) {
 			super();
-			// this.clr = clr; //~
 			this.clrRGB_ = this.toRGB(clr);
 			this.clrHex_ = this.toHex(clr);
 			console.log('input hex', clr)
@@ -57,17 +50,9 @@
 		}
 
 		// return complemntary color hex value
-		getComplementaryHex() {
-			// console.log('orginal ->', this.clrHSL_)
-			// console.log('complementray->', this.getComplementary(this.clrHSL_))
-			return this.toHex(color(this.getComplementary(this.clrHSL_))); 
-		}
+		getComplementaryHex() { return this.toHex(color(this.getComplementary(this.clrHSL_))); }
 
 		getAnalogousHex() {
-			// console.log('original rgb ', this.clrRGB_.toString())
-			// console.log('original ', this.clrHSL_.toString())
-			// console.log('color 1', this.toHex(color(this.getAnalogous(this.clrHSL_, -30))))
-			// console.log('color 2', this.toHex(color(this.getAnalogous(this.clrHSL_, -60))))
 			return [this.toHex(color(this.getAnalogous(this.clrHSL_, -30))),
 				this.toHex(color(this.getAnalogous(this.clrHSL_, -60)))];
 		}
@@ -84,9 +69,6 @@
 
 	readCurrColor = _ => {
 		customClr = new CustomColor(color(colorSwatch.value));
-		// console.log('swatch', colorSwatch.value) //~
-		// console.log('rgb swatch ', customClr.clrRGB_)
-		// console.log('hex swatch ', customClr.clrHex_)
 	}
 
 	updateSwatchColors = (swatchVals, clr) => {
