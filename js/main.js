@@ -10,14 +10,13 @@
 
 	setup = _ => {
 		createCanvas(windowWidth, windowHeight);
-		readCurrColor(); //~setcolor
+		readCurrColor();
 		renderColorVals();
 		noLoop();
 	}
 	
 	// generic color class (akin to a static class), to convet color values given string/numeric input
 	class Color {
-		// constructor() {}
 		toRGB(clr) { return this.strToArr(clr.toString('rgb')); }
 		toHex(clr) { return clr.toString('#rrggbb'); }
 		toHSL(clr) { return this.strToArr(clr.toString('hsl')); }
@@ -39,7 +38,7 @@
 	}
 
 	// CustomColor class, to instantiate color values 
-	class CustomColor extends Color { 
+	class CustomColor extends Color {
 		constructor(clr) {
 			super();
 			this.clrRGB_ = this.toRGB(clr);
