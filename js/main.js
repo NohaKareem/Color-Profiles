@@ -5,14 +5,15 @@
 		return document.querySelector(selector);
 	}
 
-	let customClr, colorSwatch = getElem('.colorSwatch');
-	let complementary = getElem('.complementary');
-	let analogous1 = getElem('.analogous1');
-	let analogous2 = getElem('.analogous2'); 
-	let pickerSwatchVals = [getElem('.colorText h3'), getElem('.rgbVal'), getElem('.hexVal'), getElem('.hslVal')]; 
-	let comSwatchVals = [getElem('.complementary h3'), getElem('.comRgbVal'), getElem('.comHexVal'), getElem('.comHslVal')]; 
-	let an1SwatchVals = [getElem('.analogous1 h3'), getElem('.an1RgbVal'), getElem('.an1HexVal'), getElem('.an1HslVal')]; 
-	let an2SwatchVals = [getElem('.analogous2 h3'), getElem('.an2RgbVal'), getElem('.an2HexVal'), getElem('.an2HslVal')]; 
+	const colorSwatch = getElem('.colorSwatch');
+	const complementary = getElem('.complementary');
+	const analogous1 = getElem('.analogous1');
+	const analogous2 = getElem('.analogous2'); 
+	const pickerSwatchVals = [getElem('.colorText h3'), getElem('.rgbVal'), getElem('.hexVal'), getElem('.hslVal')]; 
+	const comSwatchVals = [getElem('.complementary h3'), getElem('.comRgbVal'), getElem('.comHexVal'), getElem('.comHslVal')]; 
+	const an1SwatchVals = [getElem('.analogous1 h3'), getElem('.an1RgbVal'), getElem('.an1HexVal'), getElem('.an1HslVal')]; 
+	const an2SwatchVals = [getElem('.analogous2 h3'), getElem('.an2RgbVal'), getElem('.an2HexVal'), getElem('.an2HslVal')]; 
+	let colorUndo = [], colorRedo = [], customClr;
 
 	setup = _ => {
 		createCanvas(windowWidth, 0);
@@ -23,7 +24,6 @@
 	
 	// generic color class (akin to a static class), to convet color values given string/numeric input
 	class Color {
-
 		// get different color modes for a given color value, clr
 		toRGB(clr) { return this.strToArr(clr.toString('rgb')); }
 		toHex(clr) { return clr.toString('#rrggbb'); }
@@ -80,7 +80,10 @@
 		set clrHSL(hsl) { this.clrHSL_ = hsl; }
 	}
 
-	readCurrColor = _ => { customClr = new CustomColor(color(colorSwatch.value)); }
+	readCurrColor = _ => { 
+		customClr = new CustomColor(color(colorSwatch.value)); 
+		colorUndo.push(customClr);
+	}
 
 	updateSwatchColors = (swatchVals, clr) => {
 		swatchVals[1].innerHTML = `rgb(${ clr.clrRGB.toString() })`;
@@ -120,12 +123,55 @@
 		renderColorVals();
 	});
 
-	// random color generation on 'r' keypress
-	// rand hex from https://css-tricks.com/snippets/javascript/random-hex-color/
-	document.onkeydown = function(e) {
-		if (e.key == 'r' || e.key == 'R') {
-			customClr = new CustomColor(color('#' + Math.floor(Math.random() * 16777215).toString(16)));
-			renderColorVals();
+	// // random color generation on 'r' keypress
+	// document.onkeydown = function(e) {
+	// 	if (e.key == 'r' || e.key == 'R') {
+	// 		customClr = new CustomColor(color('#' + Math.floor(Math.random() * 16777215).toString(16)));
+	// 		colorUndo.push(customClr);
+	// 		renderColorVals();
+	// 	}
+	// }
+
+	keyPressed = _ => {
+		switch(keyCode) {
+			// redo
+			case RIGHT_ARROW:
+				console.log('redo len', colorRedo.length) 
+				if (colorRedo.length > 0) {
+					let tempColor = colorRedo.pop();
+					customClr = tempColor;
+					colorUndo.push(tempColor);
+				}
+				renderColorVals(); 
+				break;
+			
+			// undo
+			case LEFT_ARROW: 
+				console.log('undo len', colorUndo.length) 
+				if (colorUndo.length > 1) {
+					let tempColor = colorUndo.pop();
+					customClr = colorUndo.pop();
+					colorRedo.push(tempColor);
+				}
+				renderColorVals();
+				break;
+			
+			// space, generate rand color
+			// rand hex from https://css-tricks.com/snippets/javascript/random-hex-color/
+			case 32: 
+				customClr = new CustomColor(color('#' + Math.floor(Math.random() * 16777215).toString(16)));
+				colorUndo.push(customClr);
+				renderColorVals();
+				break;
+
+			default:
+				if (key == 'r' || key == 'R') {
+					customClr = new CustomColor(color('#' + Math.floor(Math.random() * 16777215).toString(16)));
+					colorUndo.push(customClr);
+					renderColorVals();
+				} 
+				break;
 		}
+
 	}
 })();
