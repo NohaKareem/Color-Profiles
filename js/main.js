@@ -1,12 +1,18 @@
 (_ => {
-	let customClr, colorSwatch = document.querySelector('.colorSwatch');
-	let complementary = document.querySelector('.complementary');
-	let analogous1 = document.querySelector('.analogous1');
-	let analogous2 = document.querySelector('.analogous2'); 
-	let pickerSwatchVals = [document.querySelector('.rgbVal'), document.querySelector('.hexVal'), document.querySelector('.hslVal')]; 
-	let comSwatchVals = [document.querySelector('.comRgbVal'), document.querySelector('.comHexVal'), document.querySelector('.comHslVal')]; 
-	let an1SwatchVals = [document.querySelector('.an1RgbVal'), document.querySelector('.an1HexVal'), document.querySelector('.an1HslVal')]; 
-	let an2SwatchVals = [document.querySelector('.an2RgbVal'), document.querySelector('.an2HexVal'), document.querySelector('.an2HslVal')]; 
+	
+	// helper method to get document element, for simpler code
+	getElem = selector => {
+		return document.querySelector(selector);
+	}
+
+	let customClr, colorSwatch = getElem('.colorSwatch');
+	let complementary = getElem('.complementary');
+	let analogous1 = getElem('.analogous1');
+	let analogous2 = getElem('.analogous2'); 
+	let pickerSwatchVals = [getElem('.colorText h3'), getElem('.rgbVal'), getElem('.hexVal'), getElem('.hslVal')]; 
+	let comSwatchVals = [getElem('.complementary h3'), getElem('.comRgbVal'), getElem('.comHexVal'), getElem('.comHslVal')]; 
+	let an1SwatchVals = [getElem('.analogous1 h3'), getElem('.an1RgbVal'), getElem('.an1HexVal'), getElem('.an1HslVal')]; 
+	let an2SwatchVals = [getElem('.analogous2 h3'), getElem('.an2RgbVal'), getElem('.an2HexVal'), getElem('.an2HslVal')]; 
 
 	setup = _ => {
 		createCanvas(windowWidth, windowHeight);
@@ -17,6 +23,8 @@
 	
 	// generic color class (akin to a static class), to convet color values given string/numeric input
 	class Color {
+
+		// get different color modes for a given color value, clr
 		toRGB(clr) { return this.strToArr(clr.toString('rgb')); }
 		toHex(clr) { return clr.toString('#rrggbb'); }
 		toHSL(clr) { return this.strToArr(clr.toString('hsl')); }
@@ -28,13 +36,17 @@
 				.map(ch => { return parseInt(ch) })
 		}
 
-		// helper method to convert hsl val array to p5.js color string
+		// helper method to convert hsl val array, hslArr, to p5.js color string
 		getHSLStr(hslArr) { return `hsl(${ hslArr[0] }, ${ hslArr[1] }%,${ hslArr[2] }%)`; }
 
-		// compute complementary/analogous colors
-		getComplementary(clr) { return this.getHSLStr([(clr[0] + 180) % 360, clr.slice(1)].flat()); }
+		// compute complementary color for a given color, hslClr
+		getComplementary(hslClr) { return this.getHSLStr([(hslClr[0] + 180) % 360, hslClr.slice(1)].flat()); }
 
-		getAnalogous(clr, angle) { return this.getHSLStr([(clr[0] + angle) % 360, clr.slice(1)].flat()); }
+		// compute analogous color for a given color, hslClr, with given angle
+		getAnalogous(hslClr, angle) { return this.getHSLStr([(hslClr[0] + angle) % 360, hslClr.slice(1)].flat()); }
+
+		// returns true if color, hslClr, is dark
+		isDark(hslClr) { return hslClr[2] <= 50; }
 	}
 
 	// CustomColor class, to instantiate color values 
@@ -43,18 +55,20 @@
 			super();
 			this.clrRGB_ = this.toRGB(clr);
 			this.clrHex_ = this.toHex(clr);
-			console.log('input hex', clr)
-			console.log('saved hex', this.clrHex_)
 			this.clrHSL_ = this.toHSL(clr);
 		}
 
 		// return complemntary color hex value
 		getComplementaryHex() { return this.toHex(color(this.getComplementary(this.clrHSL_))); }
 
+		// return two analgous color hex values
 		getAnalogousHex() {
 			return [this.toHex(color(this.getAnalogous(this.clrHSL_, -30))),
 				this.toHex(color(this.getAnalogous(this.clrHSL_, -60)))];
 		}
+
+		// returns true if color is dark (need to set light font color)
+		isLightFont() { return this.isDark(this.clrHSL_); }
 
 		// getter and setters
 		get clrRGB() { return this.clrRGB_; }
@@ -66,17 +80,15 @@
 		set clrHSL(hsl) { this.clrHSL_ = hsl; }
 	}
 
-	readCurrColor = _ => {
-		customClr = new CustomColor(color(colorSwatch.value));
-	}
+	readCurrColor = _ => { customClr = new CustomColor(color(colorSwatch.value)); }
 
 	updateSwatchColors = (swatchVals, clr) => {
-		swatchVals[0].innerHTML = `rgb(${ clr.clrRGB.toString() })`;
-		swatchVals[1].innerHTML = clr.clrHex_;
-		swatchVals[2].innerHTML = `hsl(${ clr.clrHSL })`; 
+		swatchVals[1].innerHTML = `rgb(${ clr.clrRGB.toString() })`;
+		swatchVals[2].innerHTML = clr.clrHex_;
+		swatchVals[3].innerHTML = `hsl(${ clr.clrHSL })`; 
 
 		// update color		
-		// swatchVals.forEach(val => { val.style.color = colorSwatch.value; });
+		if (swatchVals != pickerSwatchVals) swatchVals.forEach(val => { val.style.color = clr.isLightFont() ? 'white' : 'black'; });
 	}
 
 	// update text vals + colors
@@ -84,9 +96,6 @@
 		// update picker swatch
 		colorSwatch.style.backgroundColor = customClr.clrHex;
 		colorSwatch.value = customClr.clrHex;
-
-		// update picker vals
-		updateSwatchColors(pickerSwatchVals, customClr);
 
 		// complementary
 		let complementaryClr = customClr.getComplementaryHex();
@@ -97,7 +106,8 @@
 		analogous1.style.backgroundColor = analogousClrs[0]; 
 		analogous2.style.backgroundColor = analogousClrs[1];
 		
-		// swatch text vals
+		// swatch picker + text vals
+		updateSwatchColors(pickerSwatchVals, customClr);
 		updateSwatchColors(comSwatchVals, new CustomColor(color(complementaryClr)));
 		updateSwatchColors(an1SwatchVals, new CustomColor(color(analogousClrs[0])));
 		updateSwatchColors(an2SwatchVals, new CustomColor(color(analogousClrs[1])));
