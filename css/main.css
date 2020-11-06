@@ -2,6 +2,10 @@
   display: none;
 }
 
+.shortcut {
+  font-style: italic;
+}
+
 .centerAlign, .container {
   display: flex;
   justify-content: center;
@@ -26,14 +30,10 @@ h3 {
   font-weight: bold;
 }
 
-.shortcut {
-  font-weight: bold;
-}
-
-.circleStyles, .palette .addSwatch, .inputCon input[type=color] {
-  width: 100px;
-  height: 100px;
-  padding: 50px;
+.circleStyle, .inputCon input[type=color] {
+  width: 10vw;
+  height: 10vw;
+  padding: 5vw;
   border-radius: 50%;
   border: none;
 }
@@ -73,7 +73,7 @@ h3 {
 .inputCon input::-webkit-color-swatch {
   border: none;
 }
-.inputCon input::-webkit-color-swatch {
+.inputCon input::-moz-color-swatch {
   border: none;
 }
 .inputCon input::color-swatch {
@@ -85,19 +85,10 @@ h3 {
   flex-direction: column;
 }
 .palette .fullWid {
-  max-width: 100%;
   padding: 4%;
 }
 .palette .halfWid {
   padding: 10%;
-}
-.palette .addSwatch {
-  background-color: #eaeaea;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 5rem;
-  color: #ada8a8;
 }
 .palette .anGrid {
   display: grid;

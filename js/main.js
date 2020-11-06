@@ -15,7 +15,7 @@
 	let an2SwatchVals = [getElem('.analogous2 h3'), getElem('.an2RgbVal'), getElem('.an2HexVal'), getElem('.an2HslVal')]; 
 
 	setup = _ => {
-		createCanvas(windowWidth, windowHeight);
+		createCanvas(windowWidth, 0);
 		readCurrColor();
 		renderColorVals();
 		noLoop();
@@ -113,7 +113,7 @@
 		updateSwatchColors(an2SwatchVals, new CustomColor(color(analogousClrs[1])));
 	}
 	
-	// update P5.js color object + ~swatches' background colors on change
+	// update P5.js color object + swatches' background colors on change
 	colorSwatch.addEventListener('change', _ => {
 		colorSwatch.style.backgroundColor = colorSwatch.value;
 		readCurrColor();
