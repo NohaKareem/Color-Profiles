@@ -6,7 +6,7 @@
   font-style: italic;
 }
 
-.centerAlign, .container {
+.centerAlign, .inputCon .inputColorCon, .inputCon .colorText, .container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,14 +30,6 @@ h3 {
   font-weight: bold;
 }
 
-.circleStyle, .inputCon input[type=color] {
-  width: 10vw;
-  height: 10vw;
-  padding: 5vw;
-  border-radius: 50%;
-  border: none;
-}
-
 .container {
   margin: 0 auto;
   flex-direction: column;
@@ -52,17 +44,24 @@ h3 {
 .inputCon {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 5%;
+  column-gap: 10%;
+  justify-content: center;
   align-items: center;
-  column-gap: 20%;
+  margin-bottom: 4%;
+  align-items: center;
 }
 .inputCon .colorText {
-  display: grid;
-  grid-template-rows: 1fr 3fr;
-  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
 }
 .inputCon input[type=color] {
   background-color: #719bf9;
+  width: 13vw;
+  height: 13vw;
+  padding: 6.5vw;
+  border-radius: 50%;
+  border: none;
 }
 .inputCon input::-o-color-swatch {
   border: none;
@@ -83,16 +82,35 @@ h3 {
 .palette {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
 }
 .palette .fullWid {
   padding: 4%;
+  margin-bottom: 6.6666666667%;
 }
 .palette .halfWid {
-  padding: 10%;
+  padding: 6.6666666667%;
 }
 .palette .anGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 50vw));
+}
+
+@media screen and (min-width: 800px) {
+  .palette {
+    flex-direction: row;
+  }
+  .palette .anGrid {
+    grid-template-columns: repeat(2, minmax(0, 33.33vw));
+  }
+  .palette .fullWid {
+    width: 33.33vw;
+    display: flex;
+    flex-direction: column;
+    padding: 4%;
+    padding-top: 6.7%;
+    padding-bottom: 6.3%;
+  }
 }
 
 /*# sourceMappingURL=main.css.map */
