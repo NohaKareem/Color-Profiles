@@ -10,10 +10,7 @@
 
 	setup = _ => {
 		createCanvas(windowWidth, windowHeight);
-		console.log('swatch', colorSwatch.value)
-		customClr = new CustomColor(color(colorSwatch.value)); //~setcolor
-		console.log('rgb swatch ', customClr.clrRGB_)
-		console.log('hex swatch ', customClr.clrHex_)
+		readCurrColor(); //~setcolor
 		renderColorVals();
 		noLoop();
 	}
@@ -32,13 +29,18 @@
 				.map(ch => { return parseInt(ch) })
 		}
 
+		// helper method to convert hsl val array to p5.js color string
+		getHSLStr(hslArr) {
+			return `hsl(${ hslArr[0] }, ${ hslArr[1] }%,${ hslArr[2] }%)`;
+		}
+
 		// compute complementary/analogous colors
 		getComplementary(clr) { 
-			return [(clr[0] + 180) % 360, clr.slice(1)].flat(); 
+			return this.getHSLStr([(clr[0] + 180) % 360, clr.slice(1)].flat()); 
 		}
 
 		getAnalogous(clr, angle) {
-			return [(clr[0] + angle) % 360, clr.slice(1)].flat();
+			return this.getHSLStr([(clr[0] + angle) % 360, clr.slice(1)].flat());
 		}
 	}
 
@@ -46,24 +48,26 @@
 	class CustomColor extends Color { 
 		constructor(clr) {
 			super();
-			this.clr = clr;
+			// this.clr = clr; //~
 			this.clrRGB_ = this.toRGB(clr);
 			this.clrHex_ = this.toHex(clr);
+			console.log('input hex', clr)
+			console.log('saved hex', this.clrHex_)
 			this.clrHSL_ = this.toHSL(clr);
 		}
 
 		// return complemntary color hex value
 		getComplementaryHex() {
-			console.log('orginal ->', this.clrHSL_)
-			console.log('complementray->', this.getComplementary(this.clrHSL_))
+			// console.log('orginal ->', this.clrHSL_)
+			// console.log('complementray->', this.getComplementary(this.clrHSL_))
 			return this.toHex(color(this.getComplementary(this.clrHSL_))); 
 		}
 
 		getAnalogousHex() {
-			console.log('original rgb ', this.clrRGB_.toString())
-			console.log('original ', this.clrHSL_.toString())
-			console.log('color 1', this.toHex(color(this.getAnalogous(this.clrHSL_, -30))))
-			console.log('color 2', this.toHex(color(this.getAnalogous(this.clrHSL_, -60))))
+			// console.log('original rgb ', this.clrRGB_.toString())
+			// console.log('original ', this.clrHSL_.toString())
+			// console.log('color 1', this.toHex(color(this.getAnalogous(this.clrHSL_, -30))))
+			// console.log('color 2', this.toHex(color(this.getAnalogous(this.clrHSL_, -60))))
 			return [this.toHex(color(this.getAnalogous(this.clrHSL_, -30))),
 				this.toHex(color(this.getAnalogous(this.clrHSL_, -60)))];
 		}
@@ -76,6 +80,13 @@
 		set clrRGB(rgb) { this.clrRGB_ = rgb; }
 		set clrHex(hex) { this.clrHex_ = hex; }
 		set clrHSL(hsl) { this.clrHSL_ = hsl; }
+	}
+
+	readCurrColor = _ => {
+		customClr = new CustomColor(color(colorSwatch.value));
+		// console.log('swatch', colorSwatch.value) //~
+		// console.log('rgb swatch ', customClr.clrRGB_)
+		// console.log('hex swatch ', customClr.clrHex_)
 	}
 
 	updateSwatchColors = (swatchVals, clr) => {
@@ -114,8 +125,7 @@
 	// update P5.js color object + ~swatches' background colors on change
 	colorSwatch.addEventListener('change', _ => {
 		colorSwatch.style.backgroundColor = colorSwatch.value;
-		customClr = new CustomColor(color(colorSwatch.value));
-
+		readCurrColor();
 		renderColorVals();
 	});
 
