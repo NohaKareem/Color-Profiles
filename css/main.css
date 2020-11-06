@@ -101,15 +101,15 @@ h3 {
     flex-direction: row;
   }
   .palette .anGrid {
-    grid-template-columns: repeat(2, minmax(0, 33.33vw));
+    grid-template-columns: repeat(2, minmax(0, 32.33vw));
   }
   .palette .fullWid {
     width: 33.33vw;
     display: flex;
     flex-direction: column;
     padding: 4%;
-    padding-top: 6.7%;
-    padding-bottom: 6.3%;
+    padding-top: 6.6%;
+    padding-bottom: 6%;
   }
 }
 

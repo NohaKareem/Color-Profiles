@@ -123,15 +123,6 @@
 		renderColorVals();
 	});
 
-	// // random color generation on 'r' keypress
-	// document.onkeydown = function(e) {
-	// 	if (e.key == 'r' || e.key == 'R') {
-	// 		customClr = new CustomColor(color('#' + Math.floor(Math.random() * 16777215).toString(16)));
-	// 		colorUndo.push(customClr);
-	// 		renderColorVals();
-	// 	}
-	// }
-
 	keyPressed = _ => {
 		switch(keyCode) {
 			// redo
