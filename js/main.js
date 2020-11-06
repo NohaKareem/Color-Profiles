@@ -10,7 +10,10 @@
 
 	setup = _ => {
 		createCanvas(windowWidth, windowHeight);
+		console.log('swatch', colorSwatch.value)
 		customClr = new CustomColor(color(colorSwatch.value)); //~setcolor
+		console.log('rgb swatch ', customClr.clrRGB_)
+		console.log('hex swatch ', customClr.clrHex_)
 		renderColorVals();
 		noLoop();
 	}
@@ -51,13 +54,18 @@
 
 		// return complemntary color hex value
 		getComplementaryHex() {
+			console.log('orginal ->', this.clrHSL_)
+			console.log('complementray->', this.getComplementary(this.clrHSL_))
 			return this.toHex(color(this.getComplementary(this.clrHSL_))); 
 		}
 
-		getAnalogousHex() { 
-			
-			return [this.toHex(color(this.getAnalogous(this.clrHSL_, -60))),
-				this.toHex(color(this.getAnalogous(this.clrHSL_, -120)))];
+		getAnalogousHex() {
+			console.log('original rgb ', this.clrRGB_.toString())
+			console.log('original ', this.clrHSL_.toString())
+			console.log('color 1', this.toHex(color(this.getAnalogous(this.clrHSL_, -30))))
+			console.log('color 2', this.toHex(color(this.getAnalogous(this.clrHSL_, -60))))
+			return [this.toHex(color(this.getAnalogous(this.clrHSL_, -30))),
+				this.toHex(color(this.getAnalogous(this.clrHSL_, -60)))];
 		}
 
 		// getter and setters
@@ -88,16 +96,19 @@
 		// update picker vals
 		updateSwatchColors(pickerSwatchVals, customClr);
 
-		// complementary + analogous
-		complementary.style.backgroundColor = customClr.getComplementaryHex();
-		console.log(customClr.getComplementaryHex())
-		analogous1.style.backgroundColor = customClr.getAnalogousHex()[0]; //~
-		analogous2.style.backgroundColor = customClr.getAnalogousHex()[1];
+		// complementary
+		let complementaryClr = customClr.getComplementaryHex();
+		complementary.style.backgroundColor = complementaryClr;
+
+		// analogous
+		let analogousClrs = customClr.getAnalogousHex();
+		analogous1.style.backgroundColor = analogousClrs[0]; 
+		analogous2.style.backgroundColor = analogousClrs[1];
 		
-		// ~update complementary swatch colors ~~update vals
-		updateSwatchColors(comSwatchVals, customClr);
-		updateSwatchColors(an1SwatchVals, new CustomColor(color(customClr.getAnalogousHex()[0])));
-		updateSwatchColors(an2SwatchVals, new CustomColor(color(customClr.getAnalogousHex()[1])));
+		// swatch text vals
+		updateSwatchColors(comSwatchVals, new CustomColor(color(complementaryClr)));
+		updateSwatchColors(an1SwatchVals, new CustomColor(color(analogousClrs[0])));
+		updateSwatchColors(an2SwatchVals, new CustomColor(color(analogousClrs[1])));
 	}
 	
 	// update P5.js color object + ~swatches' background colors on change

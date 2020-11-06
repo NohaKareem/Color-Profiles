@@ -11,7 +11,7 @@
 body {
   font-size: 1.3rem;
   font-family: "Poppins", sans-serif;
-  max-width: 100%;
+  max-width: 100vh;
   overflow-x: hidden;
 }
 
