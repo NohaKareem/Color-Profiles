@@ -127,7 +127,6 @@
 		switch(keyCode) {
 			// redo
 			case RIGHT_ARROW:
-				console.log('redo len', colorRedo.length) 
 				if (colorRedo.length > 0) {
 					let tempColor = colorRedo.pop();
 					customClr = tempColor;
@@ -138,7 +137,6 @@
 			
 			// undo
 			case LEFT_ARROW: 
-				console.log('undo len', colorUndo.length) 
 				if (colorUndo.length > 1) {
 					let tempColor = colorUndo.pop();
 					customClr = colorUndo.pop();
@@ -147,7 +145,7 @@
 				renderColorVals();
 				break;
 			
-			// space, generate rand color
+			// space/r to generate rand color
 			// rand hex from https://css-tricks.com/snippets/javascript/random-hex-color/
 			case 32: 
 				customClr = new CustomColor(color('#' + Math.floor(Math.random() * 16777215).toString(16)));
